@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { stringify } from 'uuid';
+
 
 const usersSchema = mongoose.Schema({
     name: {
@@ -16,4 +16,4 @@ const usersSchema = mongoose.Schema({
     },
 }, {timestamps: true})
 
-const User = mongoose.model('User', usersSchema)
+export const User = mongoose.model('User', usersSchema)

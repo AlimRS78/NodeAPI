@@ -1,37 +1,58 @@
-import { v4 as uuidv4 } from 'uuid';
+import mongoose from 'mongoose';
+import { User } from '../models/user.js';
 
-let users = []
-
-export const getAllUsers = (req, res) => {
-    res.send(users)
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find()
+        res.status(200).json(users)
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
 }
 
-export const insertUser = (req, res) => {
+export const insertUser = async (req, res) => {
     const user = req.body
-    users.push({ id: uuidv4(), ...user })
-    res.send(`L'utente con email: ${user.email} è stato aggiunto!`)
+    const newUser = User(user)
+    try {
+        await newUser.save()
+        res.status(201).json(newUser)
+    } catch (error) {
+        res.status(409).json({ message: error.message })
+    }
 }
 
-export const getUserByID = (req, res) => {
+export const getUserByID = async (req, res) => {
     const { id } = req.params
-    const foundUser = users.find((user) => user.id == id)
-    res.send(foundUser)
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({ message: `No elements with this ID` })
+    try {
+        const foundUser = await User.findById(id)
+        res.status(200).json(foundUser)
+    } catch (error) {
+        res.status(404).json({ message: error.message })
+    }
 }
 
-export const deleteUser = (req, res) => {
+export const deleteUser = async (req, res) => {
     const { id } = req.params
-    const cleanedArray = users.filter((user) => user.id != id)
-    users = cleanedArray
-    res.send(`Utente con id: ${id} eliminato con successo!`)
-} 
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({ message: `No elements with this ID` })
+    try {
+        await User.findByIdAndDelete(id)
+        res.status(200).json({message: `Utente con ID: ${id} è stato rimosso!`})
+    }catch(error){
+        res.status(404).json({message: error.message})
+    }
+}
 
-export const updateUser = (req, res) => {
+export const updateUser = async (req, res) => {
     const { id } = req.params
-    const {name, surname, email} = req.body
+    const data = {...req.body}
 
-    const foundUser = users.find((user) => user.id == id)
-    if(name) foundUser.name = name
-    if(surname) foundUser.surname = surname
-    if(email) foundUser.email = email
-    res.send(`Utente con id: ${id} è stato modificato con successo!`)
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({ message: `No elements with this ID` })
+
+    try{
+        const user = await User.findByIdAndUpdate(id, data, {new: true})
+        res.status(200).json(user)
+    }catch(error){
+        res.status(404).json({message: error.message})
+    }
 }
