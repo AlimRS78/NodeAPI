@@ -18,20 +18,20 @@ export const getUserByID = (req, res) => {
     res.send(foundUser)
 }
 
-export const deleteUserByID = (req, res) => {
+export const deleteUser = (req, res) => {
     const { id } = req.params
     const cleanedArray = users.filter((user) => user.id != id)
     users = cleanedArray
     res.send(`Utente con id: ${id} eliminato con successo!`)
 } 
 
-export const editUserByID = (req, res) => {
+export const updateUser = (req, res) => {
     const { id } = req.params
-    const {nome, cognome, email} = req.body
+    const {name, surname, email} = req.body
 
     const foundUser = users.find((user) => user.id == id)
-    if(nome) foundUser.nome = nome
-    if(cognome) foundUser.cognome = cognome
+    if(name) foundUser.name = name
+    if(surname) foundUser.surname = surname
     if(email) foundUser.email = email
     res.send(`Utente con id: ${id} è stato modificato con successo!`)
 }
