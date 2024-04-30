@@ -24,7 +24,7 @@ export const register = async (req, res) => {
 //Proviamo a salvare i dati nel database oppure catturiamo l'erroe nel caso di fail
     try {
         await user.save()
-        res.ststus(201).json(user)
+        res.status(201).json({status: `Eseguito con successo!`, message: `Utente con username: ${username} registrato.`})
     } catch (error) {
         res.status(409).json({ status: "error", message: error.message })
     }
