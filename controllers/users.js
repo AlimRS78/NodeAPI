@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { User } from '../models/user.js';
 
+//Facciamo ritornare tutti gli utenti presenti nel data base
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find()
@@ -10,6 +11,7 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+//Permette di aggiungere un utente nel database sempre usando il Model: User
 export const insertUser = async (req, res) => {
     const user = req.body
     const newUser = User(user)
@@ -21,6 +23,7 @@ export const insertUser = async (req, res) => {
     }
 }
 
+//Permette di cercare un utente tramite il suo ID
 export const getUserByID = async (req, res) => {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({ message: `No elements with this ID` })
@@ -32,6 +35,7 @@ export const getUserByID = async (req, res) => {
     }
 }
 
+//Permette di eliminare un untente tramite il suo ID
 export const deleteUser = async (req, res) => {
     const { id } = req.params
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({ message: `No elements with this ID` })
@@ -43,6 +47,7 @@ export const deleteUser = async (req, res) => {
     }
 }
 
+//Permette di modificare un utente sempre tramite il suo ID
 export const updateUser = async (req, res) => {
     const { id } = req.params
     const data = {...req.body}

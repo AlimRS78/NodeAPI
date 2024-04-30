@@ -7,8 +7,9 @@ import {
     updateUser
 } from "../controllers/users.js";
 
-const router = express.Router()
 
+const router = express.Router()
+//Mettimao in ascolto dei metodi (GET, POST, PATCH, DELETE) negli endpoint specificati
 router.get("/", getAllUsers)
 router.post("/", insertUser)
 router.get("/:id", getUserByID)
