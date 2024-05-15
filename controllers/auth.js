@@ -40,8 +40,8 @@ export const login = async (req, res) => {
     !user && res.status(404).json({status: "error", message: `utente/password errate`})
     //se tutto ok, creiamo un token da restituire
     if(await bcrypt.compare(password, user.password)){
-        const token = JWT.sign({id: user._id, username: user.username}, JWT_SECRET)
+        const token = JWT.sign({id: user._id, username: user.username}, JWT_SECRET, {expiresIn: "30m"})
         return res.json({status: "ok", token: token})
     }
-    res.status(401).json({status: "error", message: `utente/password errate`})
+    res.status(401).json({status: "error", message: `utente/password errate`}) 
 }
